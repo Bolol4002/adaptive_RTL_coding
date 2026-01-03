@@ -1,0 +1,3 @@
+specification
+methodology/roadmap (weekly work and all)
+implementation - architecture, what approach , software and all
