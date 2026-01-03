@@ -16,7 +16,78 @@
 
 ## Introduction
 
-Explanaiton about control unit.
+This document provides a **complete, beginner-friendly explanation** of the Adaptive RTL Control Unit project.
+
+### 🔑 Key Difference Between the Two Control Units (Read This First!)
+
+Both control units produce the **same functional output** (same control signals for the same opcode), but they are **implemented differently** to optimize for different goals:
+
+| Aspect | Low-Power Control Unit | High-Performance Control Unit |
+|--------|------------------------|-------------------------------|
+| **Primary Goal** | Reduce power consumption | Reduce execution delay |
+| **Decoding Style** | **Sequential (Cascaded If-Else)** | **Parallel (One-Hot Decoding)** |
+| **How it works** | Checks opcodes one-by-one in order; stops when match found | Checks ALL opcodes simultaneously in parallel |
+| **Logic Depth** | Multiple levels (priority chain) | Single level (flat structure) |
+| **Switching Activity** | Lower (only matched path switches) | Higher (all comparators switch every cycle) |
+| **Critical Path** | Longer (signals pass through many gates) | Shorter (signals pass through fewer gates) |
+| **Power Consumption** | ✅ Lower | ❌ Higher |
+| **Speed (Max Frequency)** | ❌ Slower | ✅ Faster |
+
+### 🧠 Intuitive Explanation
+
+**Low-Power (Sequential Decoding):**
+Imagine you're looking for a book in a library by checking shelves **one by one**:
+- You check shelf A → Not here
+- You check shelf B → Not here  
+- You check shelf C → **Found it!** → You stop searching
+
+👉 **Less work = Less energy spent** (but slower if the book is on the last shelf)
+
+**High-Performance (Parallel Decoding):**
+Imagine you have **12 helpers**, each assigned to one shelf:
+- All 12 helpers check their shelf **at the same time**
+- One helper raises their hand: "Found it!"
+
+👉 **Always fast** (takes same time regardless of which shelf) **but all 12 helpers are working = more energy**
+
+### ⚡ Why This Matters for Hardware
+
+In digital circuits:
+- **Sequential logic** = Signals travel through multiple levels of gates → Longer delay → Lower max clock frequency
+- **Parallel logic** = Signals travel through fewer levels → Shorter delay → Higher max clock frequency
+
+But parallel logic has **more gates switching simultaneously**, which means:
+- More transistors toggling → More dynamic power consumption → More heat
+
+### 📊 Visual: Critical Path Comparison
+
+```
+LOW-POWER (Sequential/Cascaded If-Else):
+
+opcode ──►[NOP?]──►[ADD?]──►[SUB?]──►[AND?]──►[OR?]──►... ──► output
+            │        │        │        │       │
+            ▼        ▼        ▼        ▼       ▼
+         (match)  (match)  (match)  (match) (match)
+
+Critical Path: Goes through MULTIPLE comparison stages
+Delay = N × (comparison_delay + mux_delay)  where N = number of opcodes
+
+
+HIGH-PERFORMANCE (Parallel One-Hot Decoding):
+
+              ┌──►[NOP?]──┐
+              │           │
+              ├──►[ADD?]──┤
+              │           │
+opcode ───────┼──►[SUB?]──┼───► [OR all results] ──► output
+              │           │
+              ├──►[AND?]──┤
+              │           │
+              └──►[OR?]───┘
+
+Critical Path: Goes through SINGLE comparison + ONE OR gate
+Delay = comparison_delay + or_gate_delay (constant, regardless of opcode count)
+```
 
 ---
 
