@@ -16,7 +16,7 @@
 
 ## Introduction
 
-This document provides a **complete, beginner-friendly explanation** of the Adaptive RTL Control Unit project. Whether you're new to digital design or RTL coding, this guide will help you understand every aspect of the project—from the high-level concepts to the low-level implementation details.
+Explanaiton about control unit.
 
 ---
 
