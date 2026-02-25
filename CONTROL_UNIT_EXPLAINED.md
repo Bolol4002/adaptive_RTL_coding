@@ -498,7 +498,7 @@ Top-level wrapper that makes the design **synthesis-ready** for an FPGA.
 ```systemverilog
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        opcode_sync <= 4'b0;
+        opcode_sync <= 3'b0;
         valid_sync  <= 1'b0;
         mode_sync   <= 1'b0;
     end
@@ -536,68 +536,48 @@ output wire led_perf_mode
 
 ---
 
-## Instruction Set Architecture (ISA)
+## Instruction Set Architecture (ISA) (Simplified Minimal 5)
 
 ### Opcode Encoding
 
-| Opcode (Binary) | Opcode (Hex) | Instruction | Description |
-|-----------------|--------------|-------------|-------------|
-| `0000` | `0x0` | NOP | No operation |
-| `0001` | `0x1` | ADD | Add two registers |
-| `0010` | `0x2` | SUB | Subtract two registers |
-| `0011` | `0x3` | AND | Bitwise AND |
-| `0100` | `0x4` | OR | Bitwise OR |
-| `0101` | `0x5` | XOR | Bitwise XOR |
-| `0110` | `0x6` | LOAD | Load from memory to register |
-| `0111` | `0x7` | STORE | Store from register to memory |
-| `1000` | `0x8` | BRANCH | Conditional branch |
-| `1001` | `0x9` | JUMP | Unconditional jump |
-| `1010` | `0xA` | SLL | Shift Left Logical |
-| `1011` | `0xB` | SRL | Shift Right Logical |
+| Opcode (Binary) | Instruction | Description |
+|-----------------|-------------|-------------|
+| `000` | NOP | No operation |
+| `001` | ADD | Add two registers |
+| `010` | SUB | Subtract two registers |
+| `011` | AND | Bitwise AND |
+| `100` | OR | Bitwise OR |
 
 ### ALU Operation Codes
 
 | ALU Op (Binary) | Operation | Used By |
 |-----------------|-----------|---------|
-| `000` | ADD | ADD, LOAD, STORE |
-| `001` | SUB | SUB, BRANCH |
+| `000` | ADD | ADD |
+| `001` | SUB | SUB |
 | `010` | AND | AND |
 | `011` | OR | OR |
-| `100` | XOR | XOR |
-| `101` | SLL | SLL |
-| `110` | SRL | SRL |
-| `111` | NOP | NOP, JUMP |
+| `111` | NOP | NOP |
 
 ---
 
 ## Control Signal Reference
 
-### What Each Signal Does
+### What Each Signal Does (Minimal)
 
 | Signal | Purpose | When High (1) |
 |--------|---------|---------------|
-| `reg_write` | Enable register file write | ADD, SUB, AND, OR, XOR, LOAD, SLL, SRL |
-| `mem_read` | Enable memory read | LOAD |
-| `mem_write` | Enable memory write | STORE |
-| `alu_src` | ALU uses immediate value (not register) | LOAD, STORE |
+| `reg_write` | Enable register file write | ADD, SUB, AND, OR |
 | `alu_op[2:0]` | Tells ALU which operation to perform | Depends on instruction |
-| `branch` | Conditional branch signal | BRANCH |
-| `jump` | Unconditional jump signal | JUMP |
 
 ### Control Signal Truth Table
 
-| Instruction | reg_write | mem_read | mem_write | alu_src | alu_op | branch | jump |
-|-------------|-----------|----------|-----------|---------|--------|--------|------|
-| NOP | 0 | 0 | 0 | 0 | 111 | 0 | 0 |
-| ADD | 1 | 0 | 0 | 0 | 000 | 0 | 0 |
-| SUB | 1 | 0 | 0 | 0 | 001 | 0 | 0 |
-| AND | 1 | 0 | 0 | 0 | 010 | 0 | 0 |
-| OR | 1 | 0 | 0 | 0 | 011 | 0 | 0 |
-| XOR | 1 | 0 | 0 | 0 | 100 | 0 | 0 |
-| LOAD | 1 | 1 | 0 | 1 | 000 | 0 | 0 |
-| STORE | 0 | 0 | 1 | 1 | 000 | 0 | 0 |
-| BRANCH | 0 | 0 | 0 | 0 | 001 | 1 | 0 |
-| JUMP | 0 | 0 | 0 | 0 | 111 | 0 | 1 |
+| Instruction | reg_write | alu_op |
+|-------------|-----------|--------|
+| NOP | 0 | 111 |
+| ADD | 1 | 000 |
+| SUB | 1 | 001 |
+| AND | 1 | 010 |
+| OR | 1 | 011 |
 | SLL | 1 | 0 | 0 | 0 | 101 | 0 | 0 |
 | SRL | 1 | 0 | 0 | 0 | 110 | 0 | 0 |
 

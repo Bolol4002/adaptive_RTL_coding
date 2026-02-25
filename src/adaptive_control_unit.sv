@@ -10,7 +10,7 @@
 module adaptive_control_unit (
     input  logic        clk,
     input  logic        rst_n,
-    input  logic [3:0]  opcode,      // 4-bit opcode for instruction
+    input  logic [2:0]  opcode,      // 3-bit opcode for minimal 5 instructions
     input  logic        valid,       // Valid instruction signal
     input  logic        mode,        // Mode select: 0=Low Power, 1=High Performance
     

@@ -11,9 +11,9 @@ set project_dir  "./vivado_project"
 set part_number  "xc7a35tcpg236-1"  ;# Basys3 FPGA, change for your board
 
 # Source files location
-set src_dir      "../src"
-set tb_dir       "../tb"
-set constr_dir   "../constraints"
+set src_dir      "./src"
+set tb_dir       "./tb"
+set constr_dir   "./constraints"
 
 #=============================================================================
 # Create Project

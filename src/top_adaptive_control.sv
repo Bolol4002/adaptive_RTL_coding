@@ -9,7 +9,7 @@
 module top_adaptive_control (
     input  wire        clk_i,           // System clock input
     input  wire        rst_n_i,         // Active-low reset
-    input  wire [3:0]  opcode_i,        // Instruction opcode
+    input  wire [2:0]  opcode_i,        // Instruction opcode (3-bit)
     input  wire        valid_i,         // Valid instruction
     input  wire        mode_i,          // Mode select: 0=LowPower, 1=HighPerf
     
@@ -30,7 +30,7 @@ module top_adaptive_control (
     // Internal signals
     logic        clk;
     logic        rst_n;
-    logic [3:0]  opcode;
+    logic [2:0]  opcode;
     logic        valid;
     logic        mode;
     logic        reg_write;
@@ -44,7 +44,7 @@ module top_adaptive_control (
     logic        perf_mode_active;
     
     // Input synchronization registers
-    logic [3:0]  opcode_sync;
+    logic [2:0]  opcode_sync;
     logic        valid_sync;
     logic        mode_sync;
     
@@ -55,7 +55,7 @@ module top_adaptive_control (
     // Input synchronization (2-stage synchronizer for metastability)
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            opcode_sync <= 4'b0;
+            opcode_sync <= 3'b0;
             valid_sync  <= 1'b0;
             mode_sync   <= 1'b0;
         end

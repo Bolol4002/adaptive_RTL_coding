@@ -6,7 +6,7 @@
 
 # Project Settings
 set part_number "xc7a35tcpg236-1"
-set src_dir "../src"
+set src_dir "./src"
 
 #=============================================================================
 # Synthesize and Report: Low-Power Control Unit

@@ -1,3 +1,13 @@
-specification
-methodology/roadmap (weekly work and all)
-implementation - architecture, what approach , software and all
+Minimal Adaptive Control Unit Specification:
+- Input: 3-bit Opcode, Valid signal, Mode select
+- Output: reg_write, alu_op (3-bit)
+- Opcodes:
+  000: NOP
+  001: ADD
+  010: SUB
+  011: AND
+  100: OR
+- Features:
+  - Low-Power version uses sequential registered logic.
+  - High-Performance version uses parallel combinational logic.
+  - Adaptive wrapper for dynamic switching.
